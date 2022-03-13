@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from social_analysis import df
+
 PLATFORM_LIST=[
     "Facebook",
     "Linkedin",
@@ -69,3 +71,5 @@ def unpack_multiple_answers(df):
     df=df.join(df.used_social.str.get_dummies(sep=";").astype(bool),lsuffix="in_", rsuffix="_community")
 
     return df
+
+clean_dataset=clean_dataset(df)
