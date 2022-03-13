@@ -1,10 +1,7 @@
-from dash import Dash, html, dcc, Output, Input
 import plotly.express as px
-import pandas as pd
-import sys
+from dash import Dash, html, dcc, Output, Input
 
-from social_analysis.dataset_cleaning import clean_dataset
-from social_analysis.derived_datasets import exploded_used_social, exploded_df
+from social_analysis.derived_datasets import exploded_df
 from social_analysis.overview import get_overview_dash, follower_type_callback
 
 app = Dash(__name__)

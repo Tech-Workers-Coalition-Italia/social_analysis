@@ -63,6 +63,12 @@ def map_string_values(df):
     df=df.replace("più di 45","45+")
     df=df.replace("meno di 21","21-")
 
+    df=df.replace("dipendente con contratto regolare","contratto")
+    df=df.replace("autonomo / freelance / p.iva","autonomo")
+    df=df.replace("altro (senza contratto, imprenditoria, etc..)","altro")
+    df=df.replace("dipendente a p.iva","finta p.iva")
+
+
     return df
 
 def unpack_multiple_answers(df):
@@ -72,4 +78,4 @@ def unpack_multiple_answers(df):
 
     return df
 
-clean_dataset=clean_dataset(df)
+clean_df=clean_dataset(df)
