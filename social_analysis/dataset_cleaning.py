@@ -32,9 +32,10 @@ def rename_fields(df):
         "Come sei venuto in contatto con questo questionario?":"contact_platform",
         "Segui già Tech Workers Coalition Italia su almeno una piattaforma social?":"already_follow",
         "Quali social network utilizzi almeno una volta al giorno?":"used_social",
-        "Quante ore al giorno utilizzi i social?":"hours_used",
+        "Quante ore al giorno utilizzi i social?":"total_time",
         "Che tipo di rapporto lavorativo hai?":"contract",
         "Dove vivi?":"location",
+        "In quali fasce orarie sei più attivo/a sui social che preferisci?":"hour_of_day",
         "Come interagisci sui social?":"interactions",
         "Se sei attivo/a in una o più comunità online, su quale/i social network si trovano?":"communities",
         "Se hai selezionato \"altro\" all'ultima domanda, puoi specificare qui la piattaforma che volevi inserire:":"other_platforms"

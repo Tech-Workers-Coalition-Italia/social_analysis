@@ -1,12 +1,12 @@
 import plotly.express as px
 from dash import Dash, html, dcc, Output, Input
 
-from social_analysis.derived_datasets import exploded_df
+from social_analysis.derived_datasets import exploded_used_social_df
 from social_analysis.overview import get_overview_dash, follower_type_callback
 
 app = Dash(__name__)
 
-platforms_per_job_fig = px.histogram(exploded_df, x="job", color="used_social", barmode='stack', histfunc="sum")
+platforms_per_job_fig = px.histogram(exploded_used_social_df, x="job", color="used_social", barmode='stack', histfunc="sum")
 
 app.layout = html.Div(children=[
     html.H1(children='Presentazione Social Survey'),
