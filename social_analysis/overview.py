@@ -88,9 +88,17 @@ def get_overview_dash():
         *get_habits_dash(),
         html.H3(children='Adozione Piattaforme'),
         dcc.RadioItems(
-            ['Follower', 'Non Follower'],
-            value="Follower",
+            ["Tutti",'Follower', 'Non Follower'],
+            value="Tutti",
             id='follower_type',
+            inline=True
+        ),
+        dcc.RadioItems(
+            ['Totale',
+             #'Pesata per social di contatto'
+             ],
+            value="Totale",
+            id='social_count_type',
             inline=True
         ),
         dcc.Graph(
@@ -98,10 +106,24 @@ def get_overview_dash():
         )]),
     ]
 
+def remove_contact(row):
+    row["used_social"]=row["used_social"].remove(row["contact_platform"])
+    return row
 
-def follower_type_callback(follower_type):
-    is_follower = follower_type == "Follower"
-    platforms_fig = px.histogram(exploded_used_social_df[exploded_used_social_df["already_follow"] == is_follower], x="used_social",
+def follower_type_callback(follower_type,social_count_type):
+    df_to_use=exploded_used_social_df
+    if follower_type == "Follower":
+        df_to_use= df_to_use[df_to_use["already_follow"] == True]
+    elif follower_type == "Non Follower":
+        df_to_use= df_to_use[df_to_use["already_follow"] == False]
+
+
+    if social_count_type=='Pesata per social di contatto':
+        # not implemented yet
+        df_to_use = df_to_use
+
+
+    platforms_fig = px.histogram(df_to_use, x="used_social",
                                  color="used_social", barmode='stack', histfunc="sum")
 
     return platforms_fig

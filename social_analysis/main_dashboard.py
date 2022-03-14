@@ -22,7 +22,9 @@ app.layout = html.Div(children=[
 
 app.callback(
     Output('platforms', 'figure'),
-    Input('follower_type', 'value'),)(follower_type_callback)
+    Input('follower_type', 'value'),
+    Input('social_count_type', 'value'),
+)(follower_type_callback)
 
 server=app.server
 
