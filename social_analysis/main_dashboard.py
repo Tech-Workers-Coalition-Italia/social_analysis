@@ -24,5 +24,7 @@ app.callback(
     Output('platforms', 'figure'),
     Input('follower_type', 'value'),)(follower_type_callback)
 
+server=app.server
+
 if __name__ == '__main__':
     app.run_server(debug=True)
