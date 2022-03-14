@@ -23,7 +23,12 @@ def interactions(df):
     df["interactions"] = df["interactions"].apply(splitter)
     return df.explode("interactions")
 
+def exploded_communities(df):
+    df["communities"] = df["communities"].apply(splitter)
+    return df.explode("communities")
+
 
 exploded_used_social_df = exploded_used_social(clean_df)
 exploded_hour_of_day_df = exploded_hour_of_day(clean_df)
 interactions_df = interactions(clean_df)
+exploded_communities_df = exploded_communities(clean_df)

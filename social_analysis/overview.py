@@ -2,7 +2,8 @@ import plotly.express as px
 from dash import html, dcc
 
 from social_analysis.dataset_cleaning import clean_df
-from social_analysis.derived_datasets import exploded_used_social_df, exploded_hour_of_day_df, interactions_df
+from social_analysis.derived_datasets import exploded_used_social_df, exploded_hour_of_day_df, interactions_df, \
+    exploded_communities_df
 
 
 def get_demo_dash():
@@ -85,7 +86,9 @@ def get_overview_dash():
     return [html.Div([
         html.H2(children='Overview'),
         *get_demo_dash(),
+        html.Hr(),
         *get_habits_dash(),
+        html.Hr(),
         html.H3(children='Adozione Piattaforme'),
         dcc.RadioItems(
             ["Tutti",'Follower', 'Non Follower'],
@@ -104,23 +107,43 @@ def get_overview_dash():
         dcc.Graph(
             id='platforms',
         )]),
+
+        html.H3(children='Comunità'),
+
+        dcc.Graph(
+            id='communities',
+        ),
     ]
 
 def remove_contact(row):
     row["used_social"]=row["used_social"].remove(row["contact_platform"])
     return row
 
-def follower_type_callback(follower_type,social_count_type):
-    df_to_use=exploded_used_social_df
+def pick_df_by_options(df,follower_type, social_count_type):
     if follower_type == "Follower":
-        df_to_use= df_to_use[df_to_use["already_follow"] == True]
+        df= df[df["already_follow"] == True]
     elif follower_type == "Non Follower":
-        df_to_use= df_to_use[df_to_use["already_follow"] == False]
+        df= df[df["already_follow"] == False]
 
 
     if social_count_type=='Pesata per social di contatto':
         # not implemented yet
-        df_to_use = df_to_use
+        df = df
+
+    return df
+
+def communities_callback(follower_type, social_count_type):
+
+    df_to_use=pick_df_by_options(exploded_communities_df,follower_type,social_count_type)
+
+
+    communities_fig = px.histogram(df_to_use, x="communities",
+                                 color="communities", barmode='stack', histfunc="sum")
+
+    return communities_fig
+
+def platforms_callback(follower_type, social_count_type):
+    df_to_use=pick_df_by_options(exploded_used_social_df,follower_type,social_count_type)
 
 
     platforms_fig = px.histogram(df_to_use, x="used_social",
