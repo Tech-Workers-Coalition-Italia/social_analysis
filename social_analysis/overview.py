@@ -1,7 +1,6 @@
 import plotly.express as px
 from dash import html, dcc
 
-from social_analysis.colors import platform_to_colors
 from social_analysis.dataset_cleaning import clean_df
 from social_analysis.derived_datasets import exploded_hour_of_day_df, interactions_df
 
@@ -84,47 +83,12 @@ def get_habits_dash():
 
 def get_overview_dash():
 
-    contact_fig = px.histogram(clean_df, x="contact_platform", color="contact_platform",
-                                         barmode='stack', histfunc="sum",color_discrete_map=platform_to_colors)
-
-    contact_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'total descending'},)
     return [html.Div([
         html.H2(children='Overview'),
         *get_demo_dash(),
         html.Hr(),
         *get_habits_dash(),
-        html.Hr(),
-        html.H3(children='Piattaforma su cui hanno trovato il survey'),
-        dcc.Graph(
-            id='contact',
-            figure=contact_fig
-        ),
-        html.H3(children='Adozione Piattaforme'),
-        dcc.RadioItems(
-            ["Tutti",'Follower', 'Non Follower'],
-            value="Tutti",
-            id='follower_type',
-            inline=True
-        ),
-        dcc.RadioItems(
-            ['Totale',
-             'Pesata per social di contatto'
-             ],
-            value="Totale",
-            id='social_count_type',
-            inline=True
-        ),
-        dcc.Graph(
-            id='platforms',
-        )]),
 
-        html.H3(children='Comunità'),
-
-        dcc.Graph(
-            id='communities',
-        ),
-
-
-    ]
+    ])]
 
 

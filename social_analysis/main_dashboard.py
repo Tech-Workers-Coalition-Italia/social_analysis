@@ -4,13 +4,11 @@ from dash import Dash, html, dcc, Output, Input
 from social_analysis.colors import platform_to_colors
 from social_analysis.derived_datasets import exploded_used_social_df
 from social_analysis.overview import get_overview_dash
-from social_analysis.platform_figures import communities_callback, platforms_callback
+from social_analysis.platform_dashboard import communities_callback, platforms_callback, get_platform_dashboards, \
+    platforms_per_job_callback
 
 app = Dash(__name__)
 
-platforms_per_job_fig = px.histogram(exploded_used_social_df, x="job", color="used_social",
-                                     barmode='stack', histfunc="sum",
-                                     color_discrete_map=platform_to_colors)
 
 app.layout = html.Div(children=[
     html.H1(children='Presentazione Social Survey'),
@@ -18,13 +16,7 @@ app.layout = html.Div(children=[
     *get_overview_dash(),
 
     html.Hr(),
-    html.H3(children="Adozione piattaforme per lavoro"),
-
-    dcc.Graph(
-        id='platform_per_job',
-        figure=platforms_per_job_fig,
-
-    ),
+    *get_platform_dashboards(),
 
 ])
 
@@ -39,6 +31,11 @@ app.callback(
     Input('follower_type', 'value'),
     Input('social_count_type', 'value'),
 )(communities_callback)
+
+app.callback(
+    Output('platform_per_job', 'figure'),
+    Input('follower_type', 'value'),
+)(platforms_per_job_callback)
 
 server=app.server
 
