@@ -46,6 +46,18 @@ def platforms_per_job_callback(follower_type):
                         barmode='relative', histfunc="sum",
                         color_discrete_map=platform_to_colors)
 
+def platforms_by_age_callback(follower_type):
+    df_to_use = pick_df_by_options(exploded_used_social_df, follower_type)
+    return px.histogram(df_to_use, x="age", color="used_social",
+                        barmode='relative', histfunc="sum",
+                        color_discrete_map=platform_to_colors)
+
+def age_by_platform_callback(follower_type):
+    df_to_use = pick_df_by_options(exploded_used_social_df, follower_type)
+    return px.histogram(df_to_use, x="used_social", color="age",
+                        barmode='relative', histfunc="sum",
+                        color_discrete_map=platform_to_colors)
+
 def contact_callback(follower_type):
 
     df_to_use = pick_df_by_options(clean_df, follower_type)
@@ -97,4 +109,22 @@ def get_platform_dashboards():
                     id='platform_per_job',
                 ),
             ]
-        )])]
+        ),
+            html.Div(
+                className="five columns", children=[
+
+                    html.H3(children='Piattaforma per età'),
+
+                    dcc.Graph(
+                        id='platforms_by_age',
+                    ),
+                    html.H3(children='Distribuzione età per piattaforma'),
+
+                    dcc.Graph(
+                        id='age_by_platform',
+                    ),
+                ]
+            ),
+
+        ]),
+    ]
