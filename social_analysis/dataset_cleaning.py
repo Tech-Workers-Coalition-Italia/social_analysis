@@ -69,6 +69,8 @@ def map_string_values(df):
     df=df.replace("altro (senza contratto, imprenditoria, etc..)","altro")
     df=df.replace("dipendente a p.iva","finta p.iva")
 
+    df=df.replace("Altre piattaforme digitali","altro")
+
 
     return df
 
@@ -78,5 +80,6 @@ def unpack_multiple_answers(df):
     df=df.join(df.used_social.str.get_dummies(sep=";").astype(bool),lsuffix="in_", rsuffix="_community")
 
     return df
+
 
 clean_df=clean_dataset(df)

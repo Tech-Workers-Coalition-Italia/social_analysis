@@ -14,7 +14,6 @@ def exploded_used_social(df):
 
     return df
 
-
 def exploded_hour_of_day(df):
     df["hour_of_day"] = df["hour_of_day"].apply(splitter)
     return df.explode("hour_of_day")

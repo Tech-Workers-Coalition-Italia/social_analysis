@@ -1,11 +1,8 @@
-import plotly.express as px
-from dash import Dash, html, dcc, Output, Input
+from dash import Dash, html, Output, Input
 
-from social_analysis.colors import platform_to_colors
-from social_analysis.derived_datasets import exploded_used_social_df
 from social_analysis.overview import get_overview_dash
 from social_analysis.platform_dashboard import communities_callback, platforms_callback, get_platform_dashboards, \
-    platforms_per_job_callback
+    platforms_per_job_callback, contact_callback
 
 app = Dash(__name__)
 
@@ -37,6 +34,10 @@ app.callback(
     Input('follower_type', 'value'),
 )(platforms_per_job_callback)
 
+app.callback(
+    Output('contact', 'figure'),
+    Input('follower_type', 'value'),
+)(contact_callback)
 server=app.server
 
 if __name__ == '__main__':
