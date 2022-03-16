@@ -2,7 +2,7 @@ platform_to_colors = {
                          "Telegram": "lightblue",
                          "Facebook": "navy",
                          "Instagram": "pink",
-                         "Linkedin": "goldenrod",
+                         "Linkedin": "gold",
                          "Youtube": "red",
                          "Twitter": "cyan",
                          "Reddit": "orange",
