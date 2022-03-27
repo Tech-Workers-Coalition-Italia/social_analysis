@@ -34,7 +34,8 @@ def get_demo_dash(prefix=""):
             dcc.RadioItems(
                 ['Valore Assoluto', 'Valore Relativo'],
                 'Valore Assoluto',
-                id='measure_type'
+                id='measure_type',
+                inline=True,
             ),
             html.Div([
                 dcc.Graph(
