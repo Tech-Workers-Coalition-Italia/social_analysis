@@ -16,38 +16,40 @@ app.layout = html.Div(children=[
     *get_platform_dashboards(),
 
 ])
-
+callback_input=[
+    Input('follower_type', 'value'),
+    Input('hour_of_day_select', 'value'),
+]
 app.callback(
     Output('platforms', 'figure'),
-    Input('follower_type', 'value'),
-    Input('social_count_type', 'value'),
+    *callback_input,
+
 )(platforms_callback)
 
 app.callback(
     Output('communities', 'figure'),
-    Input('follower_type', 'value'),
-    Input('social_count_type', 'value'),
+    *callback_input,
 )(communities_callback)
 
 app.callback(
     Output('platform_per_job', 'figure'),
-    Input('follower_type', 'value'),
+    *callback_input,
 )(platforms_per_job_callback)
 
 app.callback(
     Output('contact', 'figure'),
-    Input('follower_type', 'value'),
+    *callback_input,
 )(contact_callback)
 
 app.callback(
     Output('platforms_by_age', 'figure'),
-    Input('follower_type', 'value'),
+    *callback_input,
 )(platforms_by_age_callback)
 
 
 app.callback(
     Output('age_by_platform', 'figure'),
-    Input('follower_type', 'value'),
+    *callback_input,
 )(age_by_platform_callback)
 
 server=app.server
