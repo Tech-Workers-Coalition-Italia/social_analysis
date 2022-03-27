@@ -5,30 +5,30 @@ from social_analysis.dataset_cleaning import clean_df
 from social_analysis.derived_datasets import exploded_hour_of_day_df, interactions_df
 
 
-def get_demo_dash():
-    age_fig = px.histogram(clean_df, x="age",color_discrete_sequence=['wheat'])
+def get_demo_dash(df,prefix=""):
+    age_fig = px.histogram(df, x="age",color_discrete_sequence=['wheat'])
     age_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'category ascending'})
 
-    location_fig = px.histogram(clean_df, x="location", color_discrete_sequence=['violet'])
+    location_fig = px.histogram(df, x="location", color_discrete_sequence=['violet'])
     location_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'total descending'})
 
-    contract_fig = px.histogram(clean_df, x="contract",
+    contract_fig = px.histogram(df, x="contract",
                                 color_discrete_sequence=['pink'])
     contract_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'total descending'},)
 
     return [html.H3(children='Demografia'),
             html.Div([
                 dcc.Graph(
-                    id='ages',
+                    id=prefix+'ages',
                     figure=age_fig,
                 ),
 
                 dcc.Graph(
-                    id='location',
+                    id=prefix+'location',
                     figure=location_fig),
 
                 dcc.Graph(
-                    id='contract',
+                    id=prefix+'contract',
                     figure=contract_fig),
             ], style={'display': 'flex', 'flex-direction': 'row'}),
             ]
@@ -85,7 +85,7 @@ def get_overview_dash():
 
     return [html.Div([
         html.H2(children='Overview'),
-        *get_demo_dash(),
+        *get_demo_dash(clean_df),
         html.Hr(),
         *get_habits_dash(),
 

@@ -1,5 +1,6 @@
 from dash import Dash, html, Output, Input
 
+from social_analysis.evening_dashboard import get_evening_dashboard
 from social_analysis.overview import get_overview_dash
 from social_analysis.platform_dashboard import communities_callback, platforms_callback, get_platform_dashboards, \
     platforms_per_job_callback, contact_callback, platforms_by_age_callback, age_by_platform_callback
@@ -14,6 +15,7 @@ app.layout = html.Div(children=[
 
     html.Hr(),
     *get_platform_dashboards(),
+    *get_evening_dashboard()
 
 ])
 callback_input=[
