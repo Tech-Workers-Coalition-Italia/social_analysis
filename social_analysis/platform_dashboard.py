@@ -6,7 +6,7 @@ from social_analysis.dataset_cleaning import clean_df
 from social_analysis.derived_datasets import exploded_communities_df, exploded_used_social_df
 
 
-def pick_df_by_options(df, follower_type, hour_of_day_select):
+def pick_platform_df_by_options(df, follower_type, hour_of_day_select):
     if follower_type == "Follower":
         df = df[df["already_follow"] == True]
     elif follower_type == "Non Follower":
@@ -32,38 +32,38 @@ def communities_callback(follower_type, hour_of_day_select):
     exploded_communities_df["communities"] = exploded_communities_df["communities"].replace(
         'no, non sono attivo/a in nessuna comunità online', "nessuna")
 
-    df_to_use = pick_df_by_options(exploded_communities_df, follower_type, hour_of_day_select)
+    df_to_use = pick_platform_df_by_options(exploded_communities_df, follower_type, hour_of_day_select)
     return make_figure(df_to_use, "communities", )
 
 
 def platforms_callback(follower_type, hour_of_day_select):
-    df_to_use = pick_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
+    df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
     return make_figure(df_to_use, "used_social", )
 
 
 def platforms_per_job_callback(follower_type, hour_of_day_select):
-    df_to_use = pick_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
+    df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
     return px.histogram(df_to_use, x="job", color="used_social",
                         barmode='relative', histfunc="sum",
                         color_discrete_map=platform_to_colors)
 
 
 def platforms_by_age_callback(follower_type, hour_of_day_select):
-    df_to_use = pick_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
+    df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
     return px.histogram(df_to_use, x="age", color="used_social",
                         barmode='relative', histfunc="sum",
                         color_discrete_map=platform_to_colors)
 
 
 def age_by_platform_callback(follower_type, hour_of_day_select):
-    df_to_use = pick_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
+    df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
     return px.histogram(df_to_use, x="used_social", color="age",
                         barmode='relative', histfunc="sum",
                         color_discrete_map=platform_to_colors)
 
 
 def contact_callback(follower_type, hour_of_day_select):
-    df_to_use = pick_df_by_options(clean_df, follower_type, hour_of_day_select)
+    df_to_use = pick_platform_df_by_options(clean_df, follower_type, hour_of_day_select)
     return make_figure(df_to_use, "contact_platform", )
 
 
