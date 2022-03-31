@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 from social_analysis import df
+from social_analysis.jobs import map_job_to_job_category
 
 PLATFORM_LIST = [
     "Facebook",
@@ -24,6 +25,7 @@ def clean_dataset(df):
     df = fill_missing(df)
     df = map_string_values(df)
     df = unpack_multiple_answers(df)
+    df = group_job_categories(df)
     return df
 
 
@@ -85,5 +87,8 @@ def unpack_multiple_answers(df):
 
     return df
 
+def group_job_categories(df):
+    df["job"]=df["job"].apply(lambda job: map_job_to_job_category(job))
+    return df
 
 clean_df = clean_dataset(df)
