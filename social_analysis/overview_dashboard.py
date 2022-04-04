@@ -1,73 +1,23 @@
 import plotly.express as px
 from dash import html, dcc
 
+from social_analysis.controls import get_histnorm_from_measure_type
 from social_analysis.dataset_cleaning import clean_df
 from social_analysis.derived_datasets import exploded_hour_of_day_df, interactions_df
 
 
 def age_callback(measure_type='Valore Assoluto'):
-    assert measure_type in ('Valore Assoluto', 'Valore Relativo'), f"Invalid measure_type value {measure_type}"
-    histnorm = "probability" if measure_type == 'Valore Relativo' else None
+    histnorm = get_histnorm_from_measure_type(measure_type)
     age_fig = px.histogram(clean_df, x="age", color_discrete_sequence=['wheat'], histnorm=histnorm)
     age_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'category ascending'})
     return age_fig
 
 
 def location_callback(measure_type='Valore Assoluto'):
-    assert measure_type in ('Valore Assoluto', 'Valore Relativo'), f"Invalid measure_type value {measure_type}"
-    histnorm = "probability" if measure_type == 'Valore Relativo' else None
+    histnorm = get_histnorm_from_measure_type(measure_type)
     location_fig = px.histogram(clean_df, x="location", color_discrete_sequence=['violet'], histnorm=histnorm)
     location_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'total descending'})
     return location_fig
-
-
-def contract_callback(measure_type='Valore Assoluto'):
-    assert measure_type in ('Valore Assoluto', 'Valore Relativo'), f"Invalid measure_type value {measure_type}"
-    histnorm = "probability" if measure_type == 'Valore Relativo' else None
-    contract_fig = px.histogram(clean_df, x="contract", color_discrete_sequence=['pink'], histnorm=histnorm)
-    contract_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'total descending'}, )
-    return contract_fig
-
-
-def total_time_callback(measure_type='Valore Assoluto'):
-    assert measure_type in ('Valore Assoluto', 'Valore Relativo'), f"Invalid measure_type value {measure_type}"
-    histnorm = "probability" if measure_type == 'Valore Relativo' else None
-    total_time_fig = px.histogram(clean_df, x="total_time",
-                                  category_orders={"total_time": [
-                                      "meno di 1 ora",
-                                      "da 1 a 2 ore",
-                                      "da 2 a 3 ore",
-                                      "più di 3 ore"]
-                                  },
-                                  color_discrete_sequence=['green'], histnorm=histnorm
-                                  )
-    return total_time_fig
-
-
-def hour_of_day_callback(measure_type='Valore Assoluto'):
-    assert measure_type in ('Valore Assoluto', 'Valore Relativo'), f"Invalid measure_type value {measure_type}"
-    histnorm = "probability" if measure_type == 'Valore Relativo' else None
-    hour_of_day_fig = px.histogram(exploded_hour_of_day_df, x="hour_of_day",
-                 histfunc="sum",
-                 category_orders={"hour_of_day": [
-                     "mattina",
-                     "pausa pranzo",
-                     "pomeriggio",
-                     "sera"]
-                 },
-                 color_discrete_sequence=['indianred'], histnorm=histnorm
-                 )
-    return hour_of_day_fig
-
-
-def interactions_callback(measure_type='Valore Assoluto'):
-    assert measure_type in ('Valore Assoluto', 'Valore Relativo'), f"Invalid measure_type value {measure_type}"
-    histnorm = "probability" if measure_type == 'Valore Relativo' else None
-    interactions_fig = px.histogram(interactions_df, x="interactions",
-                                    histfunc="sum",
-                                    color_discrete_sequence=['turquoise'], histnorm=histnorm
-                                    )
-    return interactions_fig
 
 
 def get_demo_dash():

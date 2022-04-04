@@ -2,8 +2,10 @@ import plotly.express as px
 from dash import html, dcc
 
 from social_analysis.colors import platform_to_colors
+from social_analysis.controls import get_histnorm_from_measure_type
 from social_analysis.dataset_cleaning import clean_df
-from social_analysis.derived_datasets import exploded_communities_df, exploded_used_social_df
+from social_analysis.derived_datasets import exploded_communities_df, exploded_used_social_df, exploded_hour_of_day_df, \
+    interactions_df
 
 
 def pick_platform_df_by_options(df, follower_type, hour_of_day_select):
@@ -17,7 +19,54 @@ def pick_platform_df_by_options(df, follower_type, hour_of_day_select):
     return df
 
 
-def make_figure(df_to_use, column, ):
+def total_time_callback(measure_type):
+    histnorm = get_histnorm_from_measure_type(measure_type)
+    total_time_fig = px.histogram(clean_df, x="total_time",
+                                  category_orders={"total_time": [
+                                      "meno di 1 ora",
+                                      "da 1 a 2 ore",
+                                      "da 2 a 3 ore",
+                                      "più di 3 ore"]
+                                  },
+                                  color_discrete_sequence=['green'], histnorm=histnorm
+                                  )
+    return total_time_fig
+
+
+def hour_of_day_callback(measure_type):
+    histnorm = get_histnorm_from_measure_type(measure_type)
+    hour_of_day_fig = px.histogram(exploded_hour_of_day_df, x="hour_of_day",
+                                   histfunc="sum",
+                                   category_orders={"hour_of_day": [
+                                       "mattina",
+                                       "pausa pranzo",
+                                       "pomeriggio",
+                                       "sera"]
+                                   },
+                                   color_discrete_sequence=['indianred'], histnorm=histnorm
+                                   )
+    return hour_of_day_fig
+
+
+def interactions_callback(measure_type):
+    histnorm = get_histnorm_from_measure_type(measure_type)
+    interactions_fig = px.histogram(interactions_df, x="interactions",
+                                    histfunc="sum",
+                                    color_discrete_sequence=['turquoise'], histnorm=histnorm
+                                    )
+    return interactions_fig
+
+
+def contract_callback(measure_type):
+    histnorm = get_histnorm_from_measure_type(measure_type)
+    contract_fig = px.histogram(clean_df, x="contract", color_discrete_sequence=['pink'], histnorm=histnorm)
+    contract_fig.update_layout(barmode='stack', xaxis={'categoryorder': 'total descending'}, )
+    return contract_fig
+
+
+
+
+def make_figure(df_to_use, column ):
     fig = px.histogram(df_to_use, x=column,
                        color=column, barmode='stack', histfunc="sum",
                        color_discrete_map={**platform_to_colors,
@@ -55,11 +104,19 @@ def platforms_by_age_callback(follower_type, hour_of_day_select):
                         color_discrete_map=platform_to_colors)
 
 
-def age_by_platform_callback(follower_type, hour_of_day_select):
+def age_by_platform_callback(follower_type, hour_of_day_select,measure_type):
+
     df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
-    return px.histogram(df_to_use, x="used_social", color="age",
-                        barmode='relative', histfunc="sum",
-                        color_discrete_map=platform_to_colors)
+    if measure_type == "Valore Assoluto":
+        return px.histogram(df_to_use, x="used_social", color="age",
+                            barmode='relative', histfunc="sum",
+                            color_discrete_map=platform_to_colors)
+    else:
+        counts=df_to_use.groupby(["age","used_social"]).size()
+        counts=counts.groupby(["used_social"]).apply(lambda x:x/x.sum())
+        counts=counts.reset_index(level=["used_social","age"])
+        return px.bar(counts, x="used_social", y=0,color="age",
+                            color_discrete_map=platform_to_colors)
 
 
 def contact_callback(follower_type, hour_of_day_select):

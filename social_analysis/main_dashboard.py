@@ -1,6 +1,6 @@
 from dash import Dash, html, Output, Input, dcc
 
-from overview_dashboard import contract_callback, total_time_callback, interactions_callback, hour_of_day_callback
+from social_analysis.platform_dashboard import contract_callback, total_time_callback, interactions_callback, hour_of_day_callback
 from social_analysis.evening_dashboard import get_evening_dashboard
 from social_analysis.overview_dashboard import get_overview_dashboards, location_callback, age_callback
 from social_analysis.platform_dashboard import communities_callback, platforms_callback, get_platform_dashboards, \
@@ -58,6 +58,7 @@ app.callback(
 callback_input = [
     Input('follower_type', 'value'),
     Input('hour_of_day_select', 'value'),
+    Input("measure_type","value")
 ]
 app.callback(
     Output('platforms', 'figure'),
