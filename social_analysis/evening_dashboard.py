@@ -1,11 +1,7 @@
-import plotly.express as px
 from dash import html, dcc
-
-from social_analysis.colors import platform_to_colors
-from social_analysis.dataset_cleaning import clean_df
-from social_analysis.derived_datasets import exploded_communities_df, exploded_used_social_df
-from social_analysis.overview_dashboard import get_demo_dash
 from plotly import graph_objs as go
+
+from social_analysis.dataset_cleaning import clean_df
 
 
 def filter_evening(df):

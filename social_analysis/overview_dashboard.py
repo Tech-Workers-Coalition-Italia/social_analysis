@@ -29,7 +29,7 @@ def contract_callback(measure_type='Valore Assoluto'):
     return contract_fig
 
 
-def get_demo_dash(prefix=""):
+def get_demo_dash():
     return [html.H3(children='Demografia'),
             dcc.RadioItems(
                 ['Valore Assoluto', 'Valore Relativo'],
@@ -39,16 +39,16 @@ def get_demo_dash(prefix=""):
             ),
             html.Div([
                 dcc.Graph(
-                    id=prefix + 'ages',
+                    id='ages',
                 ),
 
                 dcc.Graph(
-                    id=prefix + 'location',
+                    id='contract',
+                ),
+                dcc.Graph(
+                    id='location',
                 ),
 
-                dcc.Graph(
-                    id=prefix + 'contract',
-                ),
             ], style={'display': 'flex', 'flex-direction': 'row'}),
             ]
 

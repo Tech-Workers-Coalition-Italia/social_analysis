@@ -2,7 +2,7 @@ from dash import Dash, html, Output, Input
 
 from overview_dashboard import contract_callback
 from social_analysis.evening_dashboard import get_evening_dashboard
-from social_analysis.overview_dashboard import get_overview_dashboards
+from social_analysis.overview_dashboard import get_overview_dashboards, location_callback, age_callback
 from social_analysis.platform_dashboard import communities_callback, platforms_callback, get_platform_dashboards, \
     platforms_per_job_callback, contact_callback, platforms_by_age_callback, age_by_platform_callback
 
@@ -23,12 +23,12 @@ app.layout = html.Div(children=[
 app.callback(
     Output('ages', 'figure'),
     Input('measure_type', 'value'),
-)(contract_callback)
+)(age_callback)
 
 app.callback(
     Output('location', 'figure'),
     Input('measure_type', 'value'),
-)(contract_callback)
+)(location_callback)
 
 app.callback(
     Output('contract', 'figure'),
