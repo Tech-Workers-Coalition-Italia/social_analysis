@@ -64,9 +64,7 @@ def contract_callback(measure_type):
     return contract_fig
 
 
-
-
-def make_figure(df_to_use, column ):
+def make_figure(df_to_use, column):
     fig = px.histogram(df_to_use, x=column,
                        color=column, barmode='stack', histfunc="sum",
                        color_discrete_map={**platform_to_colors,
@@ -77,7 +75,7 @@ def make_figure(df_to_use, column ):
     return fig
 
 
-def communities_callback(follower_type, hour_of_day_select):
+def communities_callback(follower_type, hour_of_day_select, measure_type):
     exploded_communities_df["communities"] = exploded_communities_df["communities"].replace(
         'no, non sono attivo/a in nessuna comunità online', "nessuna")
 
@@ -85,41 +83,60 @@ def communities_callback(follower_type, hour_of_day_select):
     return make_figure(df_to_use, "communities", )
 
 
-def platforms_callback(follower_type, hour_of_day_select):
+def platforms_callback(follower_type, hour_of_day_select, measure_type):
     df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
     return make_figure(df_to_use, "used_social", )
 
 
-def platforms_per_job_callback(follower_type, hour_of_day_select):
+def platforms_per_job_callback(follower_type, hour_of_day_select, measure_type):
     df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
-    return px.histogram(df_to_use, x="job", color="used_social",
-                        barmode='relative', histfunc="sum",
-                        color_discrete_map=platform_to_colors)
+    if measure_type == "Valore Assoluto":
+        return px.histogram(df_to_use, x="job", color="used_social",
+                            barmode='relative', histfunc="sum",
+                            color_discrete_map=platform_to_colors)
+    else:
+        counts = df_to_use.groupby(["job", "used_social"]).size()
+        counts = counts.groupby(["job"]).apply(lambda x: x / x.sum())
+        counts = counts.reset_index(level=["used_social", "job"])
+        bar = px.bar(counts, x="job", y=0, color="used_social",
+                     color_discrete_map=platform_to_colors)
+        return bar
 
 
-def platforms_by_age_callback(follower_type, hour_of_day_select):
+def platforms_by_age_callback(follower_type, hour_of_day_select, measure_type):
     df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
-    return px.histogram(df_to_use, x="age", color="used_social",
-                        barmode='relative', histfunc="sum",
-                        color_discrete_map=platform_to_colors)
+    if measure_type == "Valore Assoluto":
+        hist= px.histogram(df_to_use, x="age", color="used_social",
+                            barmode='relative', histfunc="sum",
+                            color_discrete_map=platform_to_colors)
+
+        hist.update_layout(xaxis={'categoryorder': 'category ascending'})
+        return hist
+    else:
+        counts = df_to_use.groupby(["age", "used_social"]).size()
+        counts = counts.groupby(["age"]).apply(lambda x: x / x.sum())
+        counts = counts.reset_index(level=["used_social", "age"])
+        bar = px.bar(counts, x="age", y=0, color="used_social",
+                     color_discrete_map=platform_to_colors)
+        return bar
 
 
-def age_by_platform_callback(follower_type, hour_of_day_select,measure_type):
-
+def age_by_platform_callback(follower_type, hour_of_day_select, measure_type):
     df_to_use = pick_platform_df_by_options(exploded_used_social_df, follower_type, hour_of_day_select)
     if measure_type == "Valore Assoluto":
         return px.histogram(df_to_use, x="used_social", color="age",
                             barmode='relative', histfunc="sum",
                             color_discrete_map=platform_to_colors)
     else:
-        counts=df_to_use.groupby(["age","used_social"]).size()
-        counts=counts.groupby(["used_social"]).apply(lambda x:x/x.sum())
-        counts=counts.reset_index(level=["used_social","age"])
-        return px.bar(counts, x="used_social", y=0,color="age",
-                            color_discrete_map=platform_to_colors)
+        counts = df_to_use.groupby(["age", "used_social"]).size()
+        counts = counts.groupby(["used_social"]).apply(lambda x: x / x.sum())
+        counts = counts.reset_index(level=["used_social", "age"])
+        bar = px.bar(counts, x="used_social", y=0, color="age",
+                     color_discrete_map=platform_to_colors)
+        return bar
 
 
-def contact_callback(follower_type, hour_of_day_select):
+def contact_callback(follower_type, hour_of_day_select, measure_type):
     df_to_use = pick_platform_df_by_options(clean_df, follower_type, hour_of_day_select)
     return make_figure(df_to_use, "contact_platform", )
 
